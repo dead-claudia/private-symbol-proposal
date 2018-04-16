@@ -32,26 +32,32 @@ So here's my thought:
     - Note: private fields are *not* inheritable *nor* are they automatically accessible through proxies. Either they're on the raw object itself, or they aren't.
     - If you attempt to access an object without your private field defined on it, a `TypeError` is thrown.
 
+### Mental model
+
 The general rule of thumb is that a private field can be defined in (nearly) any set of curly braces, and it's visible both within that set of curly braces and any sets of curly braces contained within it. However, it's not defined in any set of curly braces above the one it's immediately defined in.
 
 ```js
 // 0: no fields visible
+const o0 = {}
 {
     // 1: only #a visible
     private #a
+    const o1 = { #a: 1 }
 
     {
         // 2: #a, #b visible
         private #b
+        const o2 = { #a: 1, #b: 2 }
 
         {
             // 3: #a, #b visible
+            const o3 = { #a: 1, #b: 2 }
         }
     }
 }
 ```
 
-Also, the other rule of thumb is that private fields only exist within objects created where they're visible, and only exist for object literals and classes (nothing else). In the above example, an object literal created in 2 or 3 could have either `#a` or `#b` set in it, but an object created in 0 couldn't have either set, even if you're reading the object in 2 or 3. Similarly, an object literal created in 1 could have `#a`, but not `#b`, even if you're reading the object in 2 or 3.
+Also, the other rule of thumb is that private fields only exist within objects created where they're visible, and only exist for object literals and classes (nothing else). In the above example, `o2` and `o3` could have either `#a` or `#b` set in it, but `o0` couldn't have either read or set, even in blocks 2 or 3. Similarly, `o1` could have `#a` set in it, but not `#b`, even in blocks 2 or 3.
 
 ## How will this handle the various needs for private data?
 
@@ -61,23 +67,23 @@ Also, the other rule of thumb is that private fields only exist within objects c
     // This works as-is, and is almost directly copied from the existing class
     // method/field proposal's README: https://github.com/tc39/proposal-class-fields
     class Counter extends HTMLElement {
-      #x = 0
+        #x = 0
 
-      #clicked = () => {
-        this.#x++
-        window.requestAnimationFrame(() => this.#render())
-      }
+        #clicked = () => {
+            this.#x++
+            window.requestAnimationFrame(() => this.#render())
+        }
 
-      constructor() {
-        super()
-        this.onclick = this.clicked
-      }
+        constructor() {
+            super()
+            this.onclick = this.clicked
+        }
 
-      connectedCallback() { this.#render() }
+        connectedCallback() { this.#render() }
 
-      #render() {
-        this.textContent = this.#x.toString()
-      }
+        #render() {
+            this.textContent = this.#x.toString()
+        }
     }
     window.customElements.define('num-counter', Counter)
     ```
@@ -88,24 +94,24 @@ Also, the other rule of thumb is that private fields only exist within objects c
 
     ```js
     class LazyCounter extends HTMLElement {
-      private #x
+        private #x
 
-      #clicked = () => {
-        if (this.#x == null) this.#x = 0
-        this.#x++
-        window.requestAnimationFrame(() => this.#render())
-      };
+        #clicked = () => {
+            if (this.#x == null) this.#x = 0
+            this.#x++
+            window.requestAnimationFrame(() => this.#render())
+        }
 
-      constructor() {
-        super()
-        this.onclick = this.#clicked
-      }
+        constructor() {
+            super()
+            this.onclick = this.#clicked
+        }
 
-      connectedCallback() { this.#render() }
+        connectedCallback() { this.#render() }
 
-      #render() {
-        this.textContent = this.#x.toString()
-      }
+        #render() {
+            this.textContent = this.#x.toString()
+        }
     }
     window.customElements.define('num-counter', Counter)
     ```
