@@ -115,14 +115,14 @@ Also, the other rule of thumb is that private fields only exist within objects c
     ```js
     private #elem, #x
     
-    function makeCounter(elem) {
+    export function makeCounter(elem) {
         const state = { #elem: elem, #x: 0 }
         render(state)
         elem.onclick = () => clicked(state)
         return state
     }
 
-    function render(state) {
+    export function render(state) {
         state.#elem.textContent = state.#x.toString()
     }
 
@@ -153,11 +153,11 @@ Also, the other rule of thumb is that private fields only exist within objects c
     // update.js
     import { getElem, getX, incrementX } from "./create.js"
 
-    function render(state) {
+    export function render(state) {
         getElem(state).textContent = getX(state).toString()
     }
 
-    function clicked(state) {
+    export function clicked(state) {
         incrementX(state)
         window.requestAnimationFrame(() => render(state))
     }
