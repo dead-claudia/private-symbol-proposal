@@ -46,11 +46,7 @@ function getExportedKeys(source) {
         get: function (O, key) { return weakGet(transact(O, key), O) },
         set: function (O, key, value) { weakSet(transact(O, key), O, V); return V },
 
-        init: function (mod, keys) {
-            if (mod == null || typeof mod !== "object") throw new TE("`mod` is not a module instance!")
-            var exports = mod.exports
-            if (exports == null || typeof exports !== "object") throw new TE("`mod` is not a module instance!")
-            var exportedRefs = exports.__exportedRefs
+        init: function (exportedRefs, keys) {
             var missing
 
             if (exportedRefs != null && typeof exportedRefs === "object") {
