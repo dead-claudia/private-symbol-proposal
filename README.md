@@ -519,3 +519,7 @@ There are a few optimizations you can make to the transpiler output, as I demons
 - Instead of checking multiple times in a single code path, you can wait until the first observable access in each one and compress them all.
 - If a getter, setter, or method is private and never accessed directly (only possible with methods), you can factor them out as functions rather than reifying them as actual properties. Also, within these getters, setters, and methods, you don't need to check at all before accessing private properties, since you couldn't get there in the first place without such a check.
 - You can omit tags and fields that aren't used. They're not observable, so there's no need to keep them unless you need to check them.
+
+## Legal
+
+The polyfill and other relevant source code is licensed under the ISC License, and for this proposal itself, [I associate CC0 with this work and have waived all copyright and related or neighboring rights to this work to the maximum extent permitted by law](https://creativecommons.org/publicdomain/zero/1.0/).
