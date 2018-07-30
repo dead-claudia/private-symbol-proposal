@@ -1,5 +1,7 @@
 # Private symbol proposal
 
+*General discussion in [tc39/proposal-class-fields#115](https://github.com/tc39/proposal-class-fields/issues/115).*
+
 I'd like to see private data done in a way that isn't so class-centric and isn't so limiting. Not everyone is using classes, some of us are still preferring (or in some cases, exclusively using) objects. Also, it'd be nice to be able to share those freely, especially across non-inheriting classes (think: module-internal slots) or even across modules (think: `protected` data or shared internal slots within a single package).
 
 So here's my thought: let's use private symbols instead.
