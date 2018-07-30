@@ -8,7 +8,8 @@ So here's my thought: let's use private symbols instead.
 - `Symbol.isPrivate(sym)` returns `true` if the symbol is private, `false` otherwise. It allows for easy introspection without too much fuss.
 - Private symbol accesses ignore proxy hooks, instead delegating straight to their target (recursively if necessary).
 - The \[[OwnPropertyKeys]] essential internal method does *not* include private symbols in its output, and a new proxy invariant would be added to ensure that handlers don't return them from `ownKeys`.
-    - This implies that `Reflect.ownKeys()`, `Object.getOwnPropertySymbols()`, and similar can't include any private symbols in their output, either.
+    - This implies indirectly that `Reflect.ownKeys()`, `Object.getOwnPropertySymbols()`, and similar can't include any private symbols in their output, either.
+    - This implies indirectly that \[[Enumerable]] is ignored, since it's only used for symbols that are actually *enumerated*.
     - This invariant exists to prevent people from enumerating private symbols on any object. This enables several optimizations, as I will discuss later.
 - Absent the above, private symbols are like any other symbol property.
 
