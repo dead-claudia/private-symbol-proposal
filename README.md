@@ -522,6 +522,6 @@ There are a few optimizations you can make to the transpiler output, as I demons
 
 ## Legal
 
-The polyfill and other relevant source code is licensed under the ISC License, and for this proposal itself, [I associate CC0 with this work and have waived all copyright and related or neighboring rights to this work to the maximum extent permitted by law](https://creativecommons.org/publicdomain/zero/1.0/).
+The polyfill and other relevant source code is licensed under the ISC License, and for this proposal itself, [I associate CC0 with this work and have waived all copyright and related or neighboring rights to this work to the maximum extent permitted by law](https://creativecommons.org/publicdomain/zero/1.0/). Attribution is *preferred*, but not required, and you can feel free to do whatever you want with it otherwise.
 
 Note that if you file a pull request, it is assumed you are able to and willing to submit your contribution under the terms of this as well.
