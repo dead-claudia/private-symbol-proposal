@@ -19,7 +19,7 @@ Yes, it's that simple. If you understand the above, you understand the entire pr
 
 There are several perks to this:
 
-1. It is mostly polyfillable, even up to and including proxy support. It requires no new syntax - no, really.
+1. It is [mostly polyfillable](https://github.com/isiahmeadows/private-symbol-proposal/blob/master/polyfill.js), even up to and including proxy support. It requires no new syntax - no, really.
 1. This avoids the need for membranes in most cases, and it can even penetrate through prototypes.
 1. Support for things like decorators, private methods, static private fields, private object literal fields, etc. naturally fall out of the grid without requiring any special support.
 1. Support for private expando properties are supported, useful for things like stateful mixins.
