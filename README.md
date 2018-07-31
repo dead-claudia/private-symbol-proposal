@@ -9,6 +9,7 @@ So here's my thought: let's use private symbols instead.
 - `Symbol.private(desc = "")` is how you create a private symbol.
 - `Symbol.isPrivate(sym)` returns `true` if the symbol is private, `false` otherwise. It allows for easy introspection without too much fuss.
 - Private symbol accesses ignore proxy hooks, instead delegating straight to their target (recursively if necessary).
+    - This includes any relevant \[[IsExtensible]] checks - the check is against the target object only, and fires no `isExtensible` proxy handler calls.
 - The \[[OwnPropertyKeys]] essential internal method does *not* include private symbols in its output, and a new proxy invariant would be added to ensure that handlers don't return them from `ownKeys`.
     - This implies indirectly that `Reflect.ownKeys()`, `Object.getOwnPropertySymbols()`, and similar can't include any private symbols in their output, either.
     - This implies indirectly that \[[Enumerable]] is ignored, since it's only used for symbols that are actually *enumerated*.
@@ -39,6 +40,9 @@ And of course, there are cons:
     - This is part of why I created the follow-on proposal detailed later. It still uses this behind the scenes, but it's to this as `async`/`await` is to promises and generators are to iterables - it takes most of the grief and boilerplate out of the common case, while still letting you dive deep when you need to.
 1. When prototypes are involved, updating fields may result in a lot of the same weirdness you'd get with normal properties - consider `this.foo += 5` when `Object.getPrototypeOf(this).foo` is 5. In that scenario, you'd wind up defining a *new* property on `this.foo` where `this.foo` is set to 10, but `Object.getPrototypeOf(this).foo` is still 5. So if you want to remain safe against prototypes, you still have to use a single `this[_data] = {...}` object.
     - Or, the moral of the story is: prototypes are weird, and approach `Object.create(proto)` with caution when you don't control the creation of `proto`. Private symbols are only going to add more ammunition for that.
+1. It's possible for you to add any number of private symbols to an object without direct consequence. This has been brought up as a theoretical concern on ESDiscuss since I posted about it [here](https://esdiscuss.org/topic/proposal-object-members#content-36), resulting in some logically sound, yet odd-seeming analogies.
+    - In practice, it shouldn't affect you except in performance-related scenarios.
+    - You can prevent this via `Object.preventExtensions()`, `Object.seal()`, and/or `Object.freeze()`, so it's not like you can't prevent them from adding unwanted private symbol fields.
 
 My proposal isn't the only one that suffers from some of these cons. [@zenparsing](https://github.com/zenparsing)'s [abstract references proposal](https://github.com/zenparsing/proposal-abstract-references) also has the first two issues, which is part of why he uses a single `data` field idiomatically.
 
