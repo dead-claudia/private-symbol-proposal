@@ -29,7 +29,7 @@ There are several perks to this:
 1. Privacy control is as simple as "do you export it". If you want to restrict a symbol to specific types, you have to do it yourself.
 1. It largely reuses the same pipeline engines already use to optimize symbol property accesses, so it'll be fast from the gate.
 1. It doesn't further propagate the absurd abuse of weak maps for private data. Weak maps are designed for key/value stores, *not* property keys, and we shouldn't be encouraging people to see them that way.
-1. Private symbols are stored weakly, and if a symbol becomes collectable, an object could open it up for a new symbol to use, avoiding almost all overhead of adding the property.
+1. Private symbols could be stored weakly, and if a symbol becomes collectable, an object could open it up for a new symbol to use, avoiding almost all overhead of adding the property.
 
 And of course, there are cons:
 
