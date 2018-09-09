@@ -17,6 +17,7 @@
     if (typeof Symbol.private === "function") return
 
     const getOwnPropertySymbols = Object.getOwnPropertySymbols
+    const getOwnPropertyDescriptors = Object.getOwnPropertyDescriptors
     const ownKeys = Reflect.ownKeys
     const OldProxy = Proxy
     const OldSymbol = Symbol
@@ -122,6 +123,15 @@
     defineMethods(Object, {
         getOwnPropertySymbols(object) {
             return removePrivateKeys(getOwnPropertySymbols(object))
+        },
+
+        getOwnPropertyDescriptors(object) {
+            const result = getOwnPropertyDescriptors(object)
+            const keys = getOwnPropertySymbols(object)
+            for (let i = 0; i < keys.length; i++) {
+                if (isPrivate(keys[i])) delete result[keys[i]]
+            }
+            return result
         },
     })
 
