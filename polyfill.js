@@ -1,8 +1,8 @@
 // There are two caveats with this polyfill:
 //
-// 1. This technically leaks every private symbol created. I can't avoid it much
-//    at all, because I can't use symbols as weak map keys.
-// 1. This will throw a `TypeError` any time `ownKeys` is called on a frozen
+// 1. This technically leaks the memory of every private symbol created. I can't
+//    avoid it because symbols aren't valid weak map keys.
+// 2. This will throw a `TypeError` any time `ownKeys` is called on a frozen
 //    object with a private symbol. Avoiding this is *extremely* non-trivial
 //    because the invariant for that method needs modified to exclude private
 //    keys from the list it checks against, but because the spec doesn't call
